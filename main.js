@@ -13,16 +13,29 @@ const PRODUCT_DATABASE = [
     {"id": "0010", "name" : "Fanta", "price": 12}
 ];
 
-function getIdQuantityMap(idList){
-	return idList
-		.reduce(function (acc, curr) {
-		  if (typeof acc[curr] == 'undefined') {
-		    acc[curr] = 1;
-		  } else {
-		    acc[curr] += 1;
-		  }
-	  return acc;
-	}, {});
+function createReceipt(idList){
+
+}
+
+function getProductListWithQuantity(idList){
+	let productWithQuantityList = [];
+
+	const uniqueIdList = new Set(idList);
+
+	for(let uniqueId of uniqueIdList){
+		const product = getProductFromId(uniqueId);
+		const quantity = idList
+			.filter(id=>id === uniqueId)
+			.length;
+
+		productWithQuantityList.push({
+			id: product.id,
+			name: product.name,
+			price: product.price,
+			quantity: quantity
+		})
+	}
+	return productWithQuantityList;
 }
 
 function getProductFromId(value){
@@ -31,6 +44,7 @@ function getProductFromId(value){
 		[0];
 }
 module.exports = {
+	createReceipt:createReceipt,
+	getProductListWithQuantity:getProductListWithQuantity,
 	getProductFromId: getProductFromId,
-	getIdQuantityMap:getIdQuantityMap
 };

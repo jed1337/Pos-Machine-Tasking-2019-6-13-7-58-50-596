@@ -20,28 +20,33 @@ it ('should get the Diet Mountain Dew product', () => {
 		"name" : "Diet Mountain Dew",
 		"price": 10
 	};
+
    expect(actualResult).toStrictEqual(expectedResult);
 });
 
 it ("should create a map containing the quantity per item. No repeats", () => {
 	const productList = ['0001', '0003', '0005'];
-	const actualResult = output.getIdQuantityMap(productList);
+	const actualResult = output.getProductListWithQuantity(productList);
+	const expectedResult = [
+		{"id": "0001", "name" : "Coca Cola", "price": 3, "quantity":1 },
+		{"id": "0003", "name" : "Pepsi-Cola", "price": 5, "quantity": 1},
+		{"id": "0005", "name" : "Dr Pepper", "price": 7, "quantity": 1}
+	]
 
-	const expectedResult = {
-		"0001" : 1,
-		"0003" : 1,
-		"0005" : 1
-	}
 	expect(actualResult).toStrictEqual(expectedResult);
 });
 
-it ("should create a map containing the quantity per item", () => {
-	const productList = ['0005', '0005', '0003', '0005', '0003'];
-	const actualResult = output.getIdQuantityMap(productList);
+it ("Should create a receipt", ()=>{
+	const productList = ['0001', '0003', '0005', '0003'];
+	const actualResult = output.createReceipt(productList);
+	const expectedResult=
+		"Receipts\n" +
+		"------------------------------------------------------------\n" +
+		"Coca Cola                       3          1\n" +
+		"Pepsi-Cola                      5          2\n" +
+		"Dr Pepper                       7          1\n" +
+		"------------------------------------------------------------\n" +
+		"Price: 20\n";
 
-	const expectedResult = {
-		"0003" : 2,
-		"0005" : 3
-	}
-	expect(actualResult).toStrictEqual(expectedResult);
+	expect(actualResult).toBe(expectedResult);
 });
