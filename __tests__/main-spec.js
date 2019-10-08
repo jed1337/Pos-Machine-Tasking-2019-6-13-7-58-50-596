@@ -74,3 +74,27 @@ it ("Should create a receipt", ()=>{
 
 	expect(actualResult).toBe(expectedResult);
 });
+
+it ("Should show an error when given an empty productList", ()=>{
+	const productList = [];
+	const actualResult = output.createReceipt(productList);
+	const expectedResult= "[ERROR]:";
+
+	expect(actualResult).toBe(expectedResult);
+});
+
+it ("Should show an error when given a single invalid ID", ()=>{
+	const productList = [3.1415];
+	const actualResult = output.createReceipt(productList);
+	const expectedResult= "[ERROR]:";
+
+	expect(actualResult).toBe(expectedResult);
+});
+
+it ("Should show an error when given an invalid ID among valid IDs", ()=>{
+	const productList = ["0001", "0002", "0003", "3.1415", "0004"];
+	const actualResult = output.createReceipt(productList);
+	const expectedResult= "[ERROR]:";
+
+	expect(actualResult).toBe(expectedResult);
+});

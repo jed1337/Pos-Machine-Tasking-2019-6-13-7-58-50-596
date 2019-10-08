@@ -17,6 +17,10 @@ const NAME_PADDING_VALUE=31;
 const PRICE_PADDING_VALUE=10;
 
 function createReceipt(idList){
+	if(isEmptyList(idList)||!isValidProduct(idList)){
+		return "[ERROR]:";
+	}
+
 	const productListWithQuantity = getProductListWithQuantity(idList);
 
 	let receipt = "Receipts\n";
@@ -31,6 +35,24 @@ function createReceipt(idList){
 	receipt+="------------------------------------------------------------\n";
 	receipt+=`Price: ${getTotalPrice(productListWithQuantity)}\n`;
 	return receipt;
+}
+
+function isEmptyList(idList){
+	return idList.length===0;
+}
+
+function isValidProduct(idList){
+	const validProductIds = PRODUCT_DATABASE
+			.map(product=>product.id);
+
+	console.log(idList);
+	for(let id of idList){
+		console.log("ID", id);
+		if(!validProductIds.includes(id)){
+			return false;
+		}
+	}
+	return true;
 }
 
 function getProductListWithQuantity(idList){
