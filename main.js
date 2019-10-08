@@ -13,12 +13,28 @@ const PRODUCT_DATABASE = [
     {"id": "0010", "name" : "Fanta", "price": 12}
 ];
 
-function createReceipt(idList){
+const NAME_PADDING_VALUE=31;
+const PRICE_PADDING_VALUE=10;
 
+function createReceipt(idList){
+	const productListWithQuantity = getProductListWithQuantity(idList);
+
+	let receipt = "Receipts\n";
+	receipt+="------------------------------------------------------------\n";
+
+	for(let productWithQuantity of productListWithQuantity){
+		const paddedName=productWithQuantity.name.padEnd(NAME_PADDING_VALUE);
+		const paddedPrice = productWithQuantity.price.toString().padEnd(PRICE_PADDING_VALUE);
+		receipt+=`${paddedName} ${paddedPrice} ${productWithQuantity.quantity}\n`
+	}
+
+	receipt+="------------------------------------------------------------\n";
+	receipt+=`Price: ${getTotalPrice(productListWithQuantity)}\n`;
+	return receipt;
 }
 
 function getProductListWithQuantity(idList){
-	let productWithQuantityList = [];
+	let productListWithQuantity = [];
 
 	const uniqueIdList = new Set(idList);
 
@@ -28,14 +44,14 @@ function getProductListWithQuantity(idList){
 			.filter(id=>id === uniqueId)
 			.length;
 
-		productWithQuantityList.push({
+		productListWithQuantity.push({
 			id: product.id,
 			name: product.name,
 			price: product.price,
 			quantity: quantity
 		})
 	}
-	return productWithQuantityList;
+	return productListWithQuantity;
 }
 
 function getProductFromId(value){
@@ -43,8 +59,16 @@ function getProductFromId(value){
 		.filter(product=>product.id===value)
 		[0];
 }
+
+function getTotalPrice(productListWithQuantity){
+	return productListWithQuantity
+		.map(product=>product.price * product.quantity)
+		.reduce((a,b)=>a+b, 0);
+}
+
 module.exports = {
 	createReceipt:createReceipt,
 	getProductListWithQuantity:getProductListWithQuantity,
 	getProductFromId: getProductFromId,
+	getTotalPrice:getTotalPrice,
 };
